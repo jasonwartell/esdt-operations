@@ -15,7 +15,7 @@ export const Authenticated: FC<AuthenticatedProps> = ({
   noSpinner = false,
   spinnerCentered = false,
 }) => {
-  const { isLoggingIn, isLoggedIn, error } = useLoggingIn();
+  const { isLoggingIn, isLoggedIn } = useLoggingIn();
 
   if (isLoggingIn)
     return noSpinner ? null : (
@@ -23,16 +23,12 @@ export const Authenticated: FC<AuthenticatedProps> = ({
         <Spinner
           thickness="3px"
           speed="0.4s"
-          color="dappTemplate.color2.base"
+          color="elvenTools.color2.base"
           size="md"
           mt={3}
         />
       </Flex>
     );
-
-  if (error) {
-    return <>{error}</>;
-  }
 
   if (!isLoggedIn) return fallback;
 
