@@ -1,12 +1,7 @@
 // Login component wraps all auth services in one place
 // You can always use only one of them if needed
-<<<<<<< HEAD
-import { useCallback, memo } from 'react';
-import { Box, Stack, useColorModeValue } from '@chakra-ui/react';
-=======
 import { useCallback, memo, useState } from 'react';
-import { Box, Stack } from '@chakra-ui/react';
->>>>>>> fc34df4cd45af7f75202d4003e43a7189263ce43
+import { Box, Stack, useColorModeValue } from '@chakra-ui/react';
 import { useLogin } from '../../hooks/auth/useLogin';
 import { LoginMethodsEnum } from '../../types/enums';
 import { MobileLoginQR } from './MobileLoginQR';

@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  SmartContract,
   ContractFunction,
   Address,
   Transaction,
   TypedValue,
   TokenPayment,
-  ContractCallPayloadBuilder,
 } from '@elrondnetwork/erdjs';
 import { ApiNetworkProvider } from '@elrondnetwork/erdjs-network-providers';
 import { useSnapshot } from 'valtio';
@@ -22,7 +22,7 @@ import { useWebWalletTxSend } from './common-helpers/useWebWalletTxSend';
 
 interface ScTransactionParams {
   smartContractAddress: string;
-  func: ContractFunction;
+  func: string;
   gasLimit: number;
   args: TypedValue[] | undefined;
   value: number | undefined;
@@ -46,8 +46,9 @@ export function useScTransaction(
   const loginInfoSnap = useSnapshot(loginInfoState);
 
   const dappProvider = getNetworkState<DappProvider>('dappProvider');
-  const apiNetworkProvider =
-    getNetworkState<ApiNetworkProvider>('apiNetworkProvider');
+  const apiNetworkProvider = getNetworkState<ApiNetworkProvider>(
+    'apiNetworkProvider'
+  );
   const currentNonce = accountSnap.nonce;
 
   useWebWalletTxSend({ setPending, setTransaction, setError, cb });
@@ -61,29 +62,26 @@ export function useScTransaction(
   }: ScTransactionParams) => {
     setTransaction(null);
     setError('');
+
     if (
       dappProvider &&
       apiNetworkProvider &&
       currentNonce !== undefined &&
-      !pending &&
-      accountSnap.address &&
-      func
+      !pending
     ) {
       setPending(true);
       cb?.({ pending: true });
 
-      const data = new ContractCallPayloadBuilder()
-        .setFunction(func)
-        .setArgs(args || [])
-        .build();
+      const contract = new SmartContract({
+        address: new Address(smartContractAddress),
+      });
 
-      const tx = new Transaction({
-        data,
+      let tx = contract.call({
+        func: new ContractFunction(func),
         gasLimit,
+        args,
         ...(value ? { value: TokenPayment.egldFromAmount(value) } : {}),
         chainID: networkConfig[chainType].shortId,
-        receiver: new Address(smartContractAddress),
-        sender: new Address(accountSnap.address),
       });
 
       tx.setNonce(currentNonce);
