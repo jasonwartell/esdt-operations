@@ -3,6 +3,7 @@ import { Spinner, Flex } from '@chakra-ui/react';
 import { useLoggingIn } from '../../hooks/auth/useLoggingIn';
 
 interface AuthenticatedProps {
+  children: React.ReactNode,
   fallback?: ReactElement;
   noSpinner?: boolean;
   spinnerCentered?: boolean;

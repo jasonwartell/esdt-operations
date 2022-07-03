@@ -1,4 +1,4 @@
-import { useEffect, Dispatch, SetStateAction, useRef } from 'react';
+import { useEffect, Dispatch, SetStateAction } from 'react';
 import {
   WALLET_PROVIDER_CALLBACK_PARAM,
   WALLET_PROVIDER_CALLBACK_PARAM_TX_SIGNED,

@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react';
 import { FC, useCallback } from 'react';
 
 interface ActionButtonProps extends BoxProps {
@@ -22,22 +22,14 @@ export const ActionButton: FC<ActionButtonProps> = ({
 
   return (
     <Box
-      as="button"
-      borderColor="dappTemplate.color2.darker"
-      borderWidth={2}
-      bgColor="transparent"
-      py={2}
-      px={6}
-      rounded="xl"
-      fontWeight="normal"
+      borderRadius="5px"
+      bg={useColorModeValue('gray.400', 'gray.600')}
+      color={useColorModeValue('teal.200', 'teal.200')}
       cursor={disabled ? 'not-allowed' : 'pointer'}
-      color="dappTemplate.white"
-      userSelect="none"
-      _hover={!disabled ? { bg: 'dappTemplate.color2.darker' } : {}}
-      transition="background-color .3s"
-      width={isFullWidth ? '100%' : 'auto'}
+      _hover={disabled ? {} : {transform: 'scale(1.02)',
+    fontWeight: '800'}}
+      width={isFullWidth ? '100%' : ['80px', '80px', '100px', '120px']}
       onClick={handleClick}
-      opacity={!disabled ? 1 : 0.5}
       {...props}
     >
       {children}

@@ -1,4 +1,5 @@
 import {
+  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -6,6 +7,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useColorModeValue,
   Spinner,
   Flex,
 } from '@chakra-ui/react';
@@ -45,15 +47,33 @@ export const LoginModalButton: FC<LoginModalButtonProps> = ({
 
   return (
     <>
-      {isLoggedIn ? (
-        <ActionButton onClick={logout}>Disconnect</ActionButton>
-      ) : (
-        <ActionButton onClick={open}>Connect</ActionButton>
+      {isLoggedIn && (
+        <ActionButton onClick={logout}>
+          <Button
+            variant="navbar"
+            height="36px"
+            width={['80px', '80px', '100px', '120px']}
+          >
+            Disconnect
+          </Button>
+        </ActionButton>
+      )}
+      {!isLoggedIn && (
+        <ActionButton onClick={open}>
+          <Button
+            variant="navbar"
+            height="36px"
+            width={['80px', '80px', '100px', '120px']}
+          >
+            Connect
+          </Button>
+        </ActionButton>
       )}
       <Modal isOpen={opened} size="sm" onClose={close} isCentered>
         <CustomModalOverlay />
         <ModalContent
-          bgColor="dappTemplate.dark.darker"
+          bg={useColorModeValue('gray.200', 'gray.800')}
+          color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
           px={6}
           pt={7}
           pb={10}

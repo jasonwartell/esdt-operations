@@ -1,12 +1,15 @@
-import { Container, Box, Text } from '@chakra-ui/react';
+import { Container, Box, Text, useColorModeValue, Flex, Spacer } from '@chakra-ui/react';
 import packageJson from '../../package.json';
 
 export const Footer = () => {
   return (
     <Box
-      height="120px"
-      bgColor="dappTemplate.dark.darker"
-      color="dappTemplate.white"
+      width="100%"
+      height="60px"
+      bgColor={useColorModeValue('gray.200', 'gray.800')}
+      borderTopWidth="1px"
+      borderTopColor={useColorModeValue('teal.600', 'teal.600')}
+      color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
       display="flex"
       alignItems="center"
     >
@@ -16,16 +19,16 @@ export const Footer = () => {
         fontWeight="normal"
         textAlign="center"
       >
-        <Box>Elrond NextJS Dapp Template (v{`${packageJson.version}`})</Box>
-        <Box fontSize="xs" fontWeight="hairline">
-          All for free. Please support the project. Give it credit and tell the
-          world about it. Attribution is not required but welcomed in the form
-          of a backlink.
+        <Box>ESDT Operations Plugin (v{`${packageJson.version}`})</Box>
+        <Flex direction="row" fontSize="xs" alignContent="center">
+          <Spacer />
+        <Box fontSize="xs">
+          Adapted from next-js-dapp by  
         </Box>
+        <Box width="5px"/>
         <Box fontSize="xs" fontWeight="bold">
           <Text
             as="a"
-            color="dappTemplate.color3.base"
             href="https://github.com/ElrondDevGuild"
             target="_blank"
             rel="noopener noreferrer nofollow"
@@ -33,6 +36,23 @@ export const Footer = () => {
             {"Elrond's Dev Guild"}
           </Text>
         </Box>
+        <Box width="5px"/>
+        <Box fontSize="xs">
+          and work by  
+        </Box>
+        <Box width="5px"/>
+        <Box fontSize="xs" fontWeight="bold">
+          <Text
+            as="a"
+            href="https://github.com/juliancwirko"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
+            {"Julian Ćwirko"}
+          </Text>
+        </Box> 
+        <Spacer />
+        </Flex>
       </Container>
     </Box>
   );
