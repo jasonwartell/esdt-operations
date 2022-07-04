@@ -11,7 +11,6 @@ The UI is built using Nextjs and a couple of helpful tools. It was developed by 
 7. `npm run build` -> `npm start` for production
 
 ### Make a .env.local file in esdt-operations root folder
-# .env.local
 # =============================================
 # Public variables (exposed on the frontend)
 # =============================================
@@ -36,5 +35,4 @@ ELROND_CUSTOM_API = https://devnet-api.elrond.com
 
 # Only this host will be allowed to consume the API (optional)
 API_ALLOWED_DAPP_HOST = http://localhost:3000
-# end .env.local
 
