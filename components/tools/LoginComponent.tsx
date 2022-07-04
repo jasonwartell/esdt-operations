@@ -9,8 +9,13 @@ import { ActionButton } from './ActionButton';
 import { LedgerAccountsList } from './LedgerAccountsList';
 
 export const LoginComponent = memo(() => {
-  const { login, isLoggedIn, error, walletConnectUri, getHWAccounts } =
-    useLogin();
+  const {
+    login,
+    isLoggedIn,
+    error,
+    walletConnectUri,
+    getHWAccounts,
+  } = useLogin();
   const [loginMethod, setLoginMethod] = useState<LoginMethodsEnum>();
 
   const handleLogin = useCallback(
@@ -33,11 +38,7 @@ export const LoginComponent = memo(() => {
 
   return (
     <>
-      <Stack
-        spacing={4}
-        direction="column"
-        align="center"
-      >
+      <Stack spacing={4} direction="column" align="center">
         {!isLoggedIn && (
           <>
             <ActionButton
@@ -61,7 +62,11 @@ export const LoginComponent = memo(() => {
             >
               Maiar Mobile App
             </ActionButton>
-            <ActionButton isFullWidth onClick={handleLedgerAccountsList}>
+            <ActionButton
+              px="8px"
+              isFullWidth
+              onClick={handleLedgerAccountsList}
+            >
               Ledger
             </ActionButton>
           </>
