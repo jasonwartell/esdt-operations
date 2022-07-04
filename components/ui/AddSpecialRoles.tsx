@@ -9,11 +9,6 @@ import {
 } from '@elrondnetwork/erdjs';
 import { useCallback } from 'react';
 import {
-  builtInEsdtSC,
-  esdtOpertationsGasLimit,
-} from '../../config/config';
-import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
-import {
   Box,
   FormErrorMessage,
   FormLabel,
@@ -32,6 +27,11 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import {
+  builtInEsdtSC,
+  esdtOpertationsGasLimit,
+} from '../../config/config';
+import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 import { useTransaction } from '../../hooks/core/useTransaction';
 
 const AddSpecialRoles = ({ cb }: { cb: (params: TransactionCb) => void }) => {

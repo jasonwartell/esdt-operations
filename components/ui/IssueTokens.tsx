@@ -4,12 +4,11 @@ import {
   U32Value,
   BigUIntValue,
   TypedValue,
+  ContractCallPayloadBuilder,
+  ContractFunction,
+  TransactionPayload,
 } from '@elrondnetwork/erdjs';
-import { useScTransaction } from '../../hooks/core/useScTransaction';
 import { useCallback } from 'react';
-
-import { builtInEsdtSC, esdtTokenProperties } from '../../config/config';
-import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 import {
   Box,
   FormErrorMessage,
@@ -19,7 +18,6 @@ import {
   Button,
   Center,
   Flex,
-  Text,
   Spacer,
   useColorModeValue,
   Checkbox,
@@ -30,20 +28,23 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { useTransaction } from '../../hooks/core/useTransaction';
+import { builtInEsdtSC, esdtTokenProperties } from '../../config/config';
+import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
+
 
 const IssueTokens = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   const { isOpen: isAreYouSureOpen, onToggle: onAreYouSureToggle } =
     useDisclosure();
 
-  const { triggerTx } = useScTransaction({ cb });
+  const { triggerTx } = useTransaction({ cb });
 
   const handleSendTx = useCallback(
-    (payment: number, gas: number, args: TypedValue[]) => {
+    (data: TransactionPayload,  payment: number, gas: number) => {
       triggerTx({
-        smartContractAddress: builtInEsdtSC,
-        func: 'issue',
+        address: builtInEsdtSC,
+        data: data,
         gasLimit: gas,
-        args: args,
         value: payment,
       });
     },
@@ -86,7 +87,13 @@ const IssueTokens = ({ cb }: { cb: (params: TransactionCb) => void }) => {
             : args.push(BytesValue.fromUTF8(false.toString()));
         }
       }
-      handleSendTx(values.cost, gas, args);
+
+      const data = new ContractCallPayloadBuilder()
+        .setFunction(new ContractFunction('issue'))
+        .setArgs(args)
+        .build();
+        
+      handleSendTx(data, values.cost, gas);
       resolve();
       reset();
     });
