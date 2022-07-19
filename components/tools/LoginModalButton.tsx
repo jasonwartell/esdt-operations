@@ -52,7 +52,7 @@ export const LoginModalButton: FC<LoginModalButtonProps> = ({
           <Button
             variant="navbar"
             height="36px"
-            width={['80px', '80px', '100px', '120px']}
+            width={['60px', '80px', '80px', '100px', '120px']}
           >
             Disconnect
           </Button>
@@ -63,7 +63,7 @@ export const LoginModalButton: FC<LoginModalButtonProps> = ({
           <Button
             variant="navbar"
             height="36px"
-            width={['80px', '80px', '100px', '120px']}
+            width={['60px', '80px', '80px', '100px', '120px']}
           >
             Connect
           </Button>

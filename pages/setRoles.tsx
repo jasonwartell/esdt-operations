@@ -1,10 +1,11 @@
+import { Box, Text, useColorModeValue } from '@chakra-ui/react';
 import { NavBar } from '../components/ui/NavBar';
-import { Box, Spacer, Text, useColorModeValue } from '@chakra-ui/react';
 import { Authenticated } from '../components/tools/Authenticated';
 import { MainLayout } from '../components/ui/MainLayout';
 import { OwnerActions } from '../components/ui/OwnerActions';
+import TokenTx from '../components/ui/TokenTx';
 
-function OwnerPage() {
+const SetRolesESDT = () => {
   return (
     <MainLayout
       metaTitle={undefined}
@@ -29,25 +30,19 @@ function OwnerPage() {
         }
       >
         <Box
-          height="100vh"
+          minHeight="100vh"
           flexDirection="column"
           justifyContent="space-between"
           width="100vw"
           mt="0px"
           mb="0px"
+          pb="5px"
         >
-          <Box
-            flex-direction="row"
-            justifyContent="center"
-            px="5px"
-            height="356px"
-          />
+          <TokenTx tokenTx={'set'} />
           <OwnerActions />
-          <Spacer />
         </Box>
       </Authenticated>
     </MainLayout>
   );
-}
-
-export default OwnerPage;
+};
+export default SetRolesESDT;

@@ -29,20 +29,23 @@ export const NavBar: FC<NavBarProps> = ({ enabled }) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box position="sticky" top="0px" zIndex={1}>
+    <Box position="sticky" top="0px" zIndex={2}>
       <Flex
         bg={useColorModeValue('gray.200', 'gray.800')}
         minH={'60px'}
         borderBottomWidth="1px"
         borderBottomColor={useColorModeValue('teal.600', 'teal.600')}
         py={{ base: 2 }}
-        px={{ base: 4 }}
+        px={[2, 4]}
         direction="row"
         width="100%"
         alignContent={'center'}
         alignItems={'center'}
       >
-        <Box display={['flex', 'none', 'none', 'none']} width="80px">
+        <Box
+          display={['flex', 'flex', 'none', 'none']}
+          width={['30px', '30px', '80px']}
+        >
           <IconButton
             onClick={onToggle}
             icon={
@@ -52,7 +55,10 @@ export const NavBar: FC<NavBarProps> = ({ enabled }) => {
             aria-label={'Toggle Navigation'}
           />
         </Box>
-        <Spacer display={['flex', 'none', 'none', 'none']} />
+        <Box display={['flex', 'flex', 'none', 'none']}>
+          <DarkModeSwitch />
+        </Box>
+        <Spacer display={['flex', 'flex', 'none', 'none']} />
         <Flex>
           <NextLink href="/">
             <Center
@@ -60,20 +66,27 @@ export const NavBar: FC<NavBarProps> = ({ enabled }) => {
               borderWidth={'1px'}
               fontFamily={'heading'}
               alignItems="center"
-              color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+              color={useColorModeValue('gray.800', 'white')}
               _hover={{ cursor: 'pointer' }}
             >
-              Home/Logo
+              Logo
             </Center>
           </NextLink>
-          <Flex display={['none', 'flex', 'flex', 'flex']} ml={4}>
+          <Flex display={['none', 'none', 'flex', 'flex']} ml={4}>
             <DesktopNav />
           </Flex>
         </Flex>
         <Spacer />
-        <Stack direction={'row'} spacing={6}>
+        <Stack
+          direction={'row'}
+          spacing={6}
+          display={['none', 'none', 'flex', 'flex']}
+        >
           {enabled.includes('auth') && <LoginModalButton />}
           <DarkModeSwitch />
+        </Stack>
+        <Stack direction={'row'} display={['flex', 'flex', 'none', 'none']}>
+          {enabled.includes('auth') && <LoginModalButton />}
         </Stack>
       </Flex>
 
@@ -108,7 +121,10 @@ const DesktopNav = () => {
                 rounded={'xl'}
                 width="fit-content"
               >
-                <Stack bg={useColorModeValue('gray.400', 'gray.700')} rounded={'xl'}>
+                <Stack
+                  bg={useColorModeValue('gray.400', 'gray.700')}
+                  rounded={'xl'}
+                >
                   {navItem.children.map((child) => (
                     <DesktopSubNav key={child.label} {...child} />
                   ))}
@@ -166,9 +182,10 @@ const DesktopSubNav = ({
 const MobileNav = () => {
   return (
     <Stack
-      bg={useColorModeValue('white', 'gray.800')}
+      bg={useColorModeValue('gray.200', 'gray.800')}
+      color={useColorModeValue('teal.600', 'teal.600')}
       p={4}
-      display={['auto', 'none', 'none', 'none']}
+      display={['auto', 'auto', 'none', 'none', 'none']}
     >
       {NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
@@ -188,17 +205,16 @@ const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
         justify={'space-between'}
         align={'left'}
         border="1px"
+        bg={useColorModeValue('gray.500', 'gray.900')}
         _hover={{
-          textDecoration: 'none',
+          bg: useColorModeValue('gray.400', 'gray.700'),
+          color: useColorModeValue('teal.200', 'teal.200'),
+          fontWeight: '800',
+          cursor: 'pointer',
         }}
       >
         <NextLink href={label.href ?? '/'}>
-          <Text
-            fontWeight={600}
-            color={useColorModeValue('gray.600', 'gray.200')}
-          >
-            {label}
-          </Text>
+          <Text>{label}</Text>
         </NextLink>
         {children && (
           <Icon
@@ -235,49 +251,49 @@ const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
 
 const NAV_ITEMS = [
   {
-    label: 'Top 1',
+    label: 'Menu 1 Label',
     href: '/',
     children: [
       {
-        label: 'Child 1-1...',
-        subLabel: '...continued (sub menu item)',
+        label: 'Menu 1.1 Label',
+        subLabel: 'Menu 1.1 Sublabel',
+        href: '/customer',
+      },
+      {
+        label: 'Menu 1.2 Label',
+        subLabel: 'Menu 1.2 Sublabel',
+        href: '/vendor',
+      },
+      {
+        label: 'Menu 1.3 Label',
+        subLabel: 'Menu 1.3 Sublabel',
         href: '/',
       },
       {
-        label: 'Child 1-2...',
-        subLabel: '...continued (sub menu item)',
-        href: '/',
-      },
-      {
-        label: 'Child 1-3...',
-        subLabel: '...continued (sub menu item)',
-        href: '/',
-      },
-      {
-        label: 'Child 1-4...',
-        subLabel: '...continued (sub menu item)',
+        label: 'Menu 1.4 Label',
+        subLabel: 'Menu 1.4 Sublabel',
         href: '/',
       },
     ],
   },
   {
-    label: 'Top 2',
+    label: 'Menu 2 Label',
     href: '/',
     children: [
       {
-        label: 'Child 2-1',
-        subLabel: '...continued (sub menu item)',
+        label: 'Menu 2.1 Label',
+        subLabel: 'Menu 2.1 Sublabel',
         href: '/',
       },
       {
-        label: 'Child 2-2...',
-        subLabel: '...continued (sub menu item)',
+        label: 'Menu 2.2 Label',
+        subLabel: 'Menu 2.2 Sublabel',
         href: '/',
       },
     ],
   },
   {
-    label: 'Top 3',
+    label: 'Menu 3 Label',
     href: '/',
   },
 ];

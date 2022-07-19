@@ -14,9 +14,8 @@ export const InputStyles = {
           borderColor: mode('teal.400', 'teal.800')(props),
           borderWidth: '1px',
           borderRadius: '5px',
-          width: '160px',
-          px: '10px',
-          mb: '20px',
+          px: '5px',
+          
           autoComplete: 'off',
           _autofill: {
             border: "1px solid #56CFC8",

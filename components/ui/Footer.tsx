@@ -1,4 +1,11 @@
-import { Container, Box, Text, useColorModeValue, Flex, Spacer } from '@chakra-ui/react';
+import {
+  Container,
+  Box,
+  Text,
+  useColorModeValue,
+  Flex,
+  Spacer,
+} from '@chakra-ui/react';
 import packageJson from '../../package.json';
 
 export const Footer = () => {
@@ -20,38 +27,40 @@ export const Footer = () => {
         textAlign="center"
       >
         <Box>ESDT Operations Plugin (v{`${packageJson.version}`})</Box>
-        <Flex direction="row" fontSize="xs" alignContent="center">
+        <Flex direction={['column', 'row']} fontSize="xs" alignContent="center">
           <Spacer />
-        <Box fontSize="xs">
-          Adapted from next-js-dapp by  
-        </Box>
-        <Box width="5px"/>
-        <Box fontSize="xs" fontWeight="bold">
-          <Text
-            as="a"
-            href="https://github.com/ElrondDevGuild"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-          >
-            {"Elrond's Dev Guild"}
-          </Text>
-        </Box>
-        <Box width="5px"/>
-        <Box fontSize="xs">
-          and work by  
-        </Box>
-        <Box width="5px"/>
-        <Box fontSize="xs" fontWeight="bold">
-          <Text
-            as="a"
-            href="https://github.com/juliancwirko"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-          >
-            {"Julian Ćwirko"}
-          </Text>
-        </Box> 
-        <Spacer />
+          <Flex direction="row" justifyContent="center" display={['none', 'flex']}>
+            <Box fontSize="xs">Adapted from</Box>
+            <Box width="5px" />
+            <Box fontSize="xs" fontWeight="bold">
+              <Text
+                as="a"
+                href="https://github.com/ElrondDevGuild"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                {"Elrond Dev Guild's"}
+              </Text>
+            </Box>
+            <Box width="5px"></Box>
+            <Box fontSize="xs">"next-js-dapp"</Box>
+          </Flex>
+          <Box width="5px" />
+          <Flex direction="row" justifyContent="center">
+            <Box fontSize="xs">developed by</Box>
+            <Box width="5px" />
+            <Box fontSize="xs" fontWeight="bold">
+              <Text
+                as="a"
+                href="https://github.com/jasonwartell"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                {'Jason Wartell'}
+              </Text>
+            </Box>
+          </Flex>
+          <Spacer />
         </Flex>
       </Container>
     </Box>

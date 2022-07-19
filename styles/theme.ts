@@ -4,16 +4,15 @@ import { InputStyles as Input } from './components/inputStyles';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
 const config: ThemeConfig = {
-  initialColorMode: 'light',
-  useSystemColorMode: true,
+  initialColorMode: 'system',
 };
 
 const breakpoints = createBreakpoints({
-  sm: '320px',
+  sm: '480px',
   md: '768px',
-  lg: '960px',
-  xl: '1200px',
-  '2xl': '1560px',
+  lg: '992px',
+  xl: '1280px',
+  '2xl': '1536px',
 });
 
 export const myTheme = extendTheme({
