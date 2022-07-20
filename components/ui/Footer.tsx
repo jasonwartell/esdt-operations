@@ -43,7 +43,7 @@ export const Footer = () => {
               </Text>
             </Box>
             <Box width="5px"></Box>
-            <Box fontSize="xs">"next-js-dapp"</Box>
+            <Box fontSize="xs">next-js-dapp</Box>
           </Flex>
           <Box width="5px" />
           <Flex direction="row" justifyContent="center">

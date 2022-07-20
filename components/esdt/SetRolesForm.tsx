@@ -1,35 +1,35 @@
 import {
+  Address,
+  AddressValue,
   BytesValue,
-  TypedValue,
   ContractCallPayloadBuilder,
   ContractFunction,
   TransactionPayload,
-  AddressValue,
-  Address,
+  TypedValue,
 } from '@elrondnetwork/erdjs';
 import { useCallback } from 'react';
 import {
   Box,
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
   Button,
   Center,
-  Flex,
-  useColorModeValue,
   Checkbox,
   CheckboxGroup,
-  Stack,
-  useDisclosure,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Grid,
   GridItem,
-  RadioGroup,
+  Input,
   Radio,
+  RadioGroup,
+  Stack,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
-import { builtInEsdtSC, esdtOpertationsGasLimit, esdtTokenProperties } from '../../config/config';
+import { builtInEsdtSC, esdtOpertationsGasLimit } from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 
 const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {

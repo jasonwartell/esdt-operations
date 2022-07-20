@@ -1,5 +1,5 @@
-import { FC, useCallback, useState, useEffect, useRef } from 'react';
-import { Box, Text, Flex, Spinner } from '@chakra-ui/react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { LoginMethodsEnum } from '../../types/enums';

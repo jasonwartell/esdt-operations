@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import { Spinner, Flex } from '@chakra-ui/react';
+import { Flex, Spinner } from '@chakra-ui/react';
 import { useLoggingIn } from '../../hooks/auth/useLoggingIn';
 
 interface AuthenticatedProps {

@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react';
 import {
   Box,
-  Flex,
-  Spinner,
   Link,
+  Spinner,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
@@ -16,8 +15,8 @@ import FreezeTokensForm from '../esdt/FreezeTokensForm';
 import MintTokensForm from '../esdt/MintTokensForm';
 import PauseTokensForm from '../esdt/PauseTokensForm';
 import WipeTokensForm from '../esdt/WipeTokensForm';
-import { FlexCardWrapper } from './CardWrapper';
-import { ActionButton } from '../tools/ActionButton';
+import { FlexCardWrapper } from '../ui/CardWrapper';
+import { ActionButton } from './ActionButton';
 import { LoginMethodsEnum } from '../../types/enums';
 import { chainType, networkConfig } from '../../config/network';
 import { shortenHash } from '../../utils/shortenHash';
@@ -57,7 +56,7 @@ const TokenTx = ({tokenTx} : {tokenTx: string}) => {
   }, []);
 
   return (
-    <Box flex-direction="row" justifyContent="center" px="5px" height="346px">
+    <Box flex-direction="row" justifyContent="center" px="5px" minHeight="346px" height="fit-content">
       {tokenTx == 'issue' && (<IssueTokensForm cb={handleTxCb} />)}
       {tokenTx == 'set' && (<SetRolesForm cb={handleTxCb} />)}
       {tokenTx == 'mint' && (<MintTokensForm cb={handleTxCb} />)}
@@ -142,7 +141,7 @@ const TokenTx = ({tokenTx} : {tokenTx: string}) => {
           </Link>
           <ActionButton
             mt={4}
-            borderColor={useColorModeValue('teal.500', 'teal.200')}
+            borderColor='teal.400'
             borderWidth="1px"
             onClick={handleClose}
           >

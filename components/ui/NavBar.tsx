@@ -251,49 +251,49 @@ const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
 
 const NAV_ITEMS = [
   {
-    label: 'Menu 1 Label',
+    label: 'Learn More',
     href: '/',
     children: [
       {
-        label: 'Menu 1.1 Label',
-        subLabel: 'Menu 1.1 Sublabel',
-        href: '/customer',
-      },
-      {
-        label: 'Menu 1.2 Label',
-        subLabel: 'Menu 1.2 Sublabel',
-        href: '/vendor',
-      },
-      {
-        label: 'Menu 1.3 Label',
-        subLabel: 'Menu 1.3 Sublabel',
+        label: 'About Us...',
+        subLabel: '...the team and our mission',
         href: '/',
       },
       {
-        label: 'Menu 1.4 Label',
-        subLabel: 'Menu 1.4 Sublabel',
+        label: 'Our Reward Program...',
+        subLabel: '...overview of how it works',
+        href: '/',
+      },
+      {
+        label: 'Customer Information...',
+        subLabel: '...how to start earning rewards',
+        href: '/',
+      },
+      {
+        label: 'Vendor Information...',
+        subLabel: '...become a participating vendor',
         href: '/',
       },
     ],
   },
   {
-    label: 'Menu 2 Label',
+    label: 'Join Our Team',
     href: '/',
     children: [
       {
-        label: 'Menu 2.1 Label',
-        subLabel: 'Menu 2.1 Sublabel',
+        label: 'Developers...',
+        subLabel: '...bring blockchain to the public',
         href: '/',
       },
       {
-        label: 'Menu 2.2 Label',
-        subLabel: 'Menu 2.2 Sublabel',
+        label: 'Marketing...',
+        subLabel: '...connect vendors and customers',
         href: '/',
       },
     ],
   },
   {
-    label: 'Menu 3 Label',
+    label: 'Learn Design',
     href: '/',
   },
 ];

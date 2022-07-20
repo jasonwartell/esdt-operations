@@ -1,15 +1,15 @@
 import {
   Button,
+  Flex,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  Text,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
-  useColorModeValue,
+  ModalContent,
+  ModalOverlay,
   Spinner,
-  Flex,
+  Text,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FC } from 'react';
 import { ActionButton } from '../tools/ActionButton';

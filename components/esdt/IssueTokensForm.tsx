@@ -1,34 +1,34 @@
 import Bignumber from 'bignumber.js';
 import {
-  BytesValue,
-  U32Value,
   BigUIntValue,
-  TypedValue,
+  BytesValue,
   ContractCallPayloadBuilder,
   ContractFunction,
   TransactionPayload,
+  TypedValue,
+  U32Value,
 } from '@elrondnetwork/erdjs';
 import { useCallback } from 'react';
 import {
   Box,
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
   Button,
   Center,
-  Flex,
-  useColorModeValue,
   Checkbox,
   CheckboxGroup,
-  Stack,
-  useDisclosure,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Grid,
   GridItem,
+  Input,
+  Stack,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
-import { builtInEsdtSC, esdtOpertationsGasLimit, esdtTokenProperties } from '../../config/config';
+import { builtInEsdtSC, esdtOpertationsGasLimit, esdtTokenProperties, issueTokenPayment } from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 
 const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
@@ -61,7 +61,7 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   function onSubmit(values: any) {
     return new Promise<void>((resolve) => {
       const gas = esdtOpertationsGasLimit; 
-      const cost = 0.05;
+      const cost = issueTokenPayment;
 
       const esdtTokenPropertiesEnabled = [
         values.canFreeze,

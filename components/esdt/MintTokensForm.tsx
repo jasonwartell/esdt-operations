@@ -1,34 +1,29 @@
 import Bignumber from 'bignumber.js';
 import {
+  BigUIntValue,
   BytesValue,
-  TypedValue,
   ContractCallPayloadBuilder,
   ContractFunction,
   TransactionPayload,
-  AddressValue,
-  Address,
-  BigUIntValue,
+  TypedValue,
 } from '@elrondnetwork/erdjs';
 import { useCallback } from 'react';
 import {
   Box,
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
   Button,
   Center,
   Flex,
-  useColorModeValue,
-  Checkbox,
-  CheckboxGroup,
-  Stack,
-  useDisclosure,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Grid,
   GridItem,
-  RadioGroup,
-  Spacer,
+  Input,
   Radio,
+  RadioGroup,
+  Stack,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';

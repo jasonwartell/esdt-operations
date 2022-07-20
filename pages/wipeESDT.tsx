@@ -3,7 +3,7 @@ import { NavBar } from '../components/ui/NavBar';
 import { Authenticated } from '../components/tools/Authenticated';
 import { MainLayout } from '../components/ui/MainLayout';
 import { OwnerActions } from '../components/ui/OwnerActions';
-import TokenTx from '../components/ui/TokenTx';
+import TokenTx from '../components/tools/TokenTx';
 
 const WipeESDT = () => {
   return (

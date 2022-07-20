@@ -1,6 +1,6 @@
-import { useEffect, useState, FunctionComponent } from 'react';
-import { Flex, Box } from '@chakra-ui/react';
-import { networkConfig, chainType } from '../../config/network';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { chainType, networkConfig } from '../../config/network';
 import { isMobile } from '../../utils/isMobile';
 import QRCode from 'qrcode';
 
