@@ -11,3 +11,8 @@
 7. `npm run build` -> `npm start` for production
 
 
+
+### Full size screen shot
+![Full_Screen](https://user-images.githubusercontent.com/26983109/179978532-2aa50f74-91db-47f2-8ae8-6abe8eb00dc7.png)
+
+
