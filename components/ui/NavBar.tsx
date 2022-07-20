@@ -98,6 +98,8 @@ export const NavBar: FC<NavBarProps> = ({ enabled }) => {
 };
 
 const DesktopNav = () => {
+  const bgPopover = useColorModeValue('gray.400', 'gray.700'); 
+  const bgStack = useColorModeValue('gray.400', 'gray.700');
   return (
     <Stack direction={'row'} spacing={[0, 1, 2, 4]}>
       {NAV_ITEMS.map((navItem) => (
@@ -116,13 +118,13 @@ const DesktopNav = () => {
             {navItem.children && (
               <PopoverContent
                 border={0}
-                bg={useColorModeValue('gray.400', 'gray.700')}
+                bg={bgPopover}
                 p={3}
                 rounded={'xl'}
                 width="fit-content"
               >
                 <Stack
-                  bg={useColorModeValue('gray.400', 'gray.700')}
+                  bg={bgStack}
                   rounded={'xl'}
                 >
                   {navItem.children.map((child) => (
@@ -251,7 +253,7 @@ const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
 
 const NAV_ITEMS = [
   {
-    label: 'Learn More',
+    label: 'Two Sub Nav',
     href: '/',
     children: [
       {
@@ -260,40 +262,25 @@ const NAV_ITEMS = [
         href: '/',
       },
       {
-        label: 'Our Reward Program...',
-        subLabel: '...overview of how it works',
-        href: '/',
-      },
-      {
-        label: 'Customer Information...',
-        subLabel: '...how to start earning rewards',
-        href: '/',
-      },
-      {
-        label: 'Vendor Information...',
-        subLabel: '...become a participating vendor',
+        label: 'Our Program...',
+        subLabel: '...overview of the program',
         href: '/',
       },
     ],
   },
   {
-    label: 'Join Our Team',
+    label: 'One Sub Nav',
     href: '/',
     children: [
       {
         label: 'Developers...',
-        subLabel: '...bring blockchain to the public',
-        href: '/',
-      },
-      {
-        label: 'Marketing...',
-        subLabel: '...connect vendors and customers',
+        subLabel: '...build on Elrond',
         href: '/',
       },
     ],
   },
   {
-    label: 'Learn Design',
+    label: 'No Sub Nav',
     href: '/',
   },
 ];
