@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
-import { builtInEsdtSC, esdtOpertationsGasLimit } from '../../config/config';
+import { builtInEsdtSC, esdtOperationsGasLimit } from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 
 const ChangeOwnerTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
@@ -56,7 +56,7 @@ const ChangeOwnerTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) 
 
   function onSubmit(values: any) {
     return new Promise<void>((resolve) => {
-      const gas = esdtOpertationsGasLimit;
+      const gas = esdtOperationsGasLimit;
       const cost = 0;
 
       const args: TypedValue[] = [
