@@ -7,11 +7,11 @@ export function middleware(request: NextRequest) {
   const definedHost = process.env.API_ALLOWED_DAPP_HOST;
   
   if (!definedHost) return NextResponse.next();
-/*
-  if (request.nextUrl.pathname.startsWith('/send')) {
+
+  if (request.nextUrl.pathname.startsWith('/sendScESDT')) {
     return NextResponse.rewrite(new URL('/underConstruction', request.url))
   }
-*/
+
   let referer = request.headers.get('referer');
 
   if (!referer?.includes(definedHost)) {
