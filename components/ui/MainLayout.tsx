@@ -21,8 +21,12 @@ export const MainLayout: FC<MainLayoutProps> = memo(
           metaImage={metaImage}
           metaUrl={metaUrl}
         />
-        <Box bg={useColorModeValue('gray.100', 'gray.900')} minHeight="100vh">
-          {children}  
+        <Box
+          bg={useColorModeValue('gray.100', 'gray.900')}
+          minHeight="100vh"
+          height="fit-content"
+        >
+          {children}
         </Box>
         <Footer />
       </>

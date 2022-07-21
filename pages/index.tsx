@@ -3,6 +3,7 @@ import { Box, Spacer, Text, useColorModeValue } from '@chakra-ui/react';
 import { Authenticated } from '../components/tools/Authenticated';
 import { MainLayout } from '../components/ui/MainLayout';
 import { OwnerActions } from '../components/ui/OwnerActions';
+import { Footer } from '../components/ui/Footer';
 
 function OwnerPage() {
   return (
@@ -29,7 +30,7 @@ function OwnerPage() {
         }
       >
         <Box
-          height="100vh"
+          minHeight="100vh"
           flexDirection="column"
           justifyContent="space-between"
           width="100vw"
@@ -43,8 +44,10 @@ function OwnerPage() {
             height="356px"
           />
           <OwnerActions />
+          
           <Spacer />
         </Box>
+        
       </Authenticated>
     </MainLayout>
   );

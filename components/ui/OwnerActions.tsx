@@ -27,6 +27,7 @@ export const OwnerActions = () => {
       <Grid
         ml="20px"
         mr="20px"
+        mb="10px"
         height="fit-content"
         width={['full', '480px', '768px', '992px', '1280px']}
         templateRows={[
