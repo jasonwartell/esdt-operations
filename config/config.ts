@@ -37,5 +37,9 @@ export const builtInEsdtSC =
 // Predefined one time payment for token issuance (EGLD amount)
 export const issueTokenPayment = 0.05;
 
-export const esdtOpertationsGasLimit = 60000000;
-export const esdtLocalOpertationsGasLimit = 300000;
+export const esdtOperationsGasLimit: number = 60000000;
+export const esdtSingleTransferGasLimit: number = 500000;
+export const esdtLocalOpertationsGasLimit: number = 300000;
+export const multiEsdtBaseGasLimit: number = 50000;
+export const multiEsdtDataGasLimit: number = 1500;
+export const multiEsdtPaymentGasLimit: number = 1000000;

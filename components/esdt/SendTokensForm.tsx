@@ -1,19 +1,14 @@
+import axios from 'axios';
 import {
-  Address,
-  AddressValue,
-  BytesValue,
-  ContractCallPayloadBuilder,
-  ContractFunction,
+  ESDTTransferPayloadBuilder,
+  TokenPayment,
   TransactionPayload,
-  TypedValue,
 } from '@elrondnetwork/erdjs';
 import { useCallback } from 'react';
 import {
   Box,
   Button,
   Center,
-  Checkbox,
-  CheckboxGroup,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -21,27 +16,24 @@ import {
   Grid,
   GridItem,
   Input,
-  Radio,
-  RadioGroup,
-  Stack,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
-import { builtInEsdtSC, esdtOperationsGasLimit } from '../../config/config';
+import { chain, esdtSingleTransferGasLimit, publicApi } from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 
-const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
+const SendTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   const { triggerTx } = useTransaction({ cb });
 
   const handleSendTx = useCallback(
-    (data: TransactionPayload, payment: number, gas: number) => {
+    (data: TransactionPayload, address: string, gas: number) => {
       triggerTx({
-        address: builtInEsdtSC,
+        address: address,
         data: data,
         gasLimit: gas,
-        value: payment,
+        value: 0.0,
       });
     },
     [triggerTx]
@@ -60,29 +52,33 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   } = useForm();
 
   function onSubmit(values: any) {
-    return new Promise<void>((resolve) => {
-      const gas = esdtOperationsGasLimit;
-      const cost = 0;
 
-      const args: TypedValue[] = [
-        BytesValue.fromUTF8(values.ticker),
-        new AddressValue(new Address(values.address.trim())),
-      ];
+    return new Promise<void>(async (resolve) => {
+      const esdtOnNetwork = await axios.get<{ decimals: number }>(
+        `${publicApi[chain]}/tokens/${values.ticker.trim()}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
 
-      if (values.burn) {
-        args.push(BytesValue.fromUTF8('ESDTRoleLocalBurn'));
-      }
-      if (values.mint) {
-        args.push(BytesValue.fromUTF8('ESDTRoleLocalMint'));
-      }
+      const numDecimals = esdtOnNetwork?.data?.decimals;
 
-      const data = new ContractCallPayloadBuilder()
-        .setFunction(new ContractFunction(
-          values.setUnset === 'set' ? 'setSpecialRole' : 'unSetSpecialRole'))
-        .setArgs(args)
-        .build();
+      if (numDecimals !== undefined && numDecimals !== null) {
+        const payment = TokenPayment.fungibleFromAmount(
+          values.ticker,
+          values.amount,
+          numDecimals
+        );
+        const data = new ESDTTransferPayloadBuilder().setPayment(payment).build();
+  
+        const gasLimit = esdtSingleTransferGasLimit;
+      
+        handleSendTx(data, values.address, gasLimit);
+      };
 
-      handleSendTx(data, cost, gas);
       resolve();
       reset();
     });
@@ -91,11 +87,12 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   ///// Form Placeholders & Default Values
   const formTicker = 'ABC-123456';
   const formAddress = 'erd1...';
+  const formAmount = 0;
 
   return (
     <Flex direction="row" justifyContent="center" mt="10px">
       <Box
-        width={['full', 'full', '650px']}
+        width={['full', 'full', '400px']}
         height="fit-content"
         borderWidth="1px"
         borderRadius="5px"
@@ -113,97 +110,44 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
             borderRadius="5px"
             fontWeight="bold"
           >
-            Set or Unset Special Roles
+            Transfer ESDT
           </Center>
         </Box>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid
-            templateRows={['repeat(4, 1fr)', 'repeat(3, 1fr)']}
-            templateColumns={['repeat(7, 1fr)', 'repeat(24, 1fr)']}
+            templateRows={'repeat(3, 1fr)'}
+            templateColumns={'repeat(24, 1fr)'}
           >
-            <GridItem rowStart={1} colStart={2} rowSpan={1} colSpan={10}>
-              <FormControl>
+            <GridItem rowSpan={1} colSpan={24} px={['2px', '5px']}>
+              <FormControl isInvalid={!!errors?.address}>
                 <FormLabel
-                  mb="2px"
-                  textAlign="center"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
-                >
-                  Select Action
-                </FormLabel>
-                <RadioGroup colorScheme="teal" defaultValue={'set'}>
-                  <Stack spacing={5} direction="row" justifyContent="center">
-                    <Radio
-                      value="set"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
-                      {...register('setUnset')}
-                    >
-                      Set
-                    </Radio>
-                    <Radio
-                      value="unset"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
-                      {...register('setUnset')}
-                    >
-                      Unset
-                    </Radio>
-                  </Stack>
-                </RadioGroup>
-              </FormControl>
-            </GridItem>
-            <GridItem rowStart={1} colStart={13} rowSpan={1} colSpan={10}>
-              <FormControl>
-                <FormLabel
-                  textAlign="center"
+                  htmlFor="address"
+                  mt="10px"
                   mb="0px"
                   color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
                   fontSize={['sm', 'md']}
-                  width="full"
                 >
-                  Select Roles
+                  Recipient Address
                 </FormLabel>
-                <CheckboxGroup
-                  colorScheme="gray"
-                  defaultValue={['mint', 'burn']}
-                >
-                  <Stack spacing={5} direction="row" justifyContent="center">
-                    <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
-                      value="mint"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
-                      {...register('mint')}
-                    >
-                      Mint
-                    </Checkbox>
-                    <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
-                      value="burn"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
-                      {...register('burn')}
-                    >
-                      Burn
-                    </Checkbox>
-                  </Stack>
-                </CheckboxGroup>
+                <Input
+                  id="address"
+                  placeholder={formAddress}
+                  variant="owner"
+                  {...register('address', {
+                    required: 'This is required',
+                    pattern: {
+                      value: /^erd1[a-zA-Z0-9]{58}$/,
+                      message: 'Invalid wallet address',
+                    },
+                  })}
+                />
+                <FormErrorMessage color="red.700" mb="-16px" mt="0px">
+                  {errors.address && errors.address.message}
+                </FormErrorMessage>
               </FormControl>
             </GridItem>
-            <GridItem
-              rowSpan={1}
-              colSpan={[7, 24]}
-              px={['2px', '5px']}
-            >
+            <GridItem rowSpan={1} colSpan={12} px={['2px', '5px']}>
               <FormControl isInvalid={!!errors?.ticker}>
                 <FormLabel
                   htmlFor="ticker"
@@ -233,42 +177,42 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="-10px" mt="0px">
+                <FormErrorMessage color="red.700" mb="4px" mt="0px">
                   {errors.ticker && errors.ticker.message}
                 </FormErrorMessage>
               </FormControl>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={24} px={['2px', '5px']}>
-              <FormControl isInvalid={!!errors?.address}>
+            <GridItem rowSpan={1} colSpan={12} px={['2px', '5px']}>
+              <FormControl isInvalid={!!errors?.amount}>
                 <FormLabel
-                  htmlFor="address"
-                  mt="10px"
+                  htmlFor="amount"
                   mb="0px"
                   color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
                   fontSize={['sm', 'md']}
                 >
-                  Wallet Address
+                  Amount to Send
                 </FormLabel>
                 <Input
-                  id="address"
-                  placeholder={formAddress}
+                  id="amount"
+                  type="number"
+                  defaultValue={formAmount}
                   variant="owner"
-                  {...register('address', {
+                  {...register('amount', {
                     required: 'This is required',
-                    pattern: {
-                      value: /^erd1[a-zA-Z0-9]{58}$/,
-                      message: 'Invalid wallet address',
+                    min: {
+                      value: 1e-30,
+                      message: 'Must send >1e-30 tokens',
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="-16px" mt="0px">
-                  {errors.address && errors.address.message}
+                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                  {errors.amount && errors.amount.message}
                 </FormErrorMessage>
               </FormControl>
             </GridItem>
             <GridItem
-              rowStart={[5, 4]}
-              colStart={[2, 7]}
+              rowStart={3}
+              colStart={7}
               rowSpan={1}
               colSpan={2}
               px="5px"
@@ -296,8 +240,8 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
               </Center>
             </GridItem>
             <GridItem
-              rowStart={[5, 4]}
-              colStart={[5, 15]}
+              rowStart={3}
+              colStart={15}
               rowSpan={1}
               colSpan={2}
               px="5px"
@@ -317,4 +261,4 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
     </Flex>
   );
 };
-export default SetRolesForm;
+export default SendTokensForm;

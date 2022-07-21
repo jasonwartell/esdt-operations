@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
-import { builtInEsdtSC, esdtOpertationsGasLimit, esdtTokenProperties, issueTokenPayment } from '../../config/config';
+import { builtInEsdtSC, esdtOperationsGasLimit, esdtTokenProperties, issueTokenPayment } from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 
 const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
@@ -60,7 +60,7 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
 
   function onSubmit(values: any) {
     return new Promise<void>((resolve) => {
-      const gas = esdtOpertationsGasLimit; 
+      const gas = esdtOperationsGasLimit; 
       const cost = issueTokenPayment;
 
       const esdtTokenPropertiesEnabled = [
@@ -220,6 +220,14 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                   variant="owner"
                   {...register('decimals', {
                     required: 'This is required',
+                    min: {
+                      value: 0,
+                      message: 'Must be between 0-18'
+                    },
+                    max: {
+                      value: 18,
+                      message: 'Must be between 0-18'
+                    },
                     pattern: {
                       value: /^[0-9]+$/,
                       message: 'Must be a number',

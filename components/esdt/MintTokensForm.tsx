@@ -177,7 +177,7 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                       message: 'No more than 17 characters',
                     },
                     pattern: {
-                      value: /^[A-Z]+-[a-zA-Z0-9]+$/,
+                      value: /^[A-Z]{3,10}-[a-z0-9]{6}$/,
                       message: 'Invalid Tocken Ticker',
                     },
                   })}
@@ -199,13 +199,14 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 </FormLabel>
                 <Input
                   id="supply"
+                  type="number"
                   defaultValue={formSupply}
                   variant="owner"
                   {...register('supply', {
                     required: 'This is required',
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: 'Must be a number',
+                    min: {
+                      value: 1e-30,
+                      message: 'Must mint >1e-30',
                     },
                   })}
                 />

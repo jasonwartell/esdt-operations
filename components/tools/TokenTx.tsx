@@ -14,12 +14,14 @@ import ChangeOwnerTokensForm from '../esdt/ChangeOwnerTokensForm';
 import FreezeTokensForm from '../esdt/FreezeTokensForm';
 import MintTokensForm from '../esdt/MintTokensForm';
 import PauseTokensForm from '../esdt/PauseTokensForm';
+import SendTokensForm from '../esdt/SendTokensForm';
 import WipeTokensForm from '../esdt/WipeTokensForm';
 import { FlexCardWrapper } from '../ui/CardWrapper';
 import { ActionButton } from './ActionButton';
 import { LoginMethodsEnum } from '../../types/enums';
 import { chainType, networkConfig } from '../../config/network';
 import { shortenHash } from '../../utils/shortenHash';
+import SendMultiTokensForm from '../esdt/SendMultiTokensForm';
 
 const TokenTx = ({tokenTx} : {tokenTx: string}) => {
   const [result, setResult] = useState<{ type: string; content: string }>();
@@ -64,6 +66,8 @@ const TokenTx = ({tokenTx} : {tokenTx: string}) => {
       {tokenTx == 'pause' && (<PauseTokensForm cb={handleTxCb} />)}
       {tokenTx == 'wipe' && (<WipeTokensForm cb={handleTxCb} />)}
       {tokenTx == 'change' && (<ChangeOwnerTokensForm cb={handleTxCb} />)}
+      {tokenTx == 'send' && (<SendTokensForm cb={handleTxCb} />)}
+      {tokenTx == 'multi' && (<SendMultiTokensForm cb={handleTxCb} />)}
       {error && (
         <FlexCardWrapper
           zIndex={1}
