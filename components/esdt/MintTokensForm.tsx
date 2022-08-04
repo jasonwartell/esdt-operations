@@ -85,7 +85,16 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
 
   ///// Form Placeholders & Default Values
   const formTicker = 'ABC-123456';
-  const formSupply = 1000000000;
+  const formSupply = '0';
+
+  ///// Color Scheme
+  const formLabelColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.600');
+  const errorColor = useColorModeValue('red.600', 'red.500');
+  const titleBackgroundColor = useColorModeValue('teal.400', 'teal.800');
+  const titleTextColor = useColorModeValue('gray.500', 'gray.900');
+  const titleBorderColor = useColorModeValue('gray.500', 'gray.900');
+  const formBackgroundColor = useColorModeValue('gray.300', 'gray.800');
+  const formBorderColor = useColorModeValue('teal.400', 'teal.800');
 
   return (
     <Flex direction="row" justifyContent="center" mt="10px">
@@ -94,16 +103,16 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
         height="fit-content"
         borderWidth="1px"
         borderRadius="5px"
-        bg={useColorModeValue('gray.300', 'gray.800')}
-        borderColor={useColorModeValue('teal.400', 'teal.800')}
+        bg={formBackgroundColor}
+        borderColor={formBorderColor}
         flexDirection="row"
         justifyContent="space-between"
       >
         <Box width="full" height="30px" px="5px" pt="5px" mb="10px">
           <Center
-            bg={useColorModeValue('teal.400', 'teal.800')}
-            color={useColorModeValue('gray.500', 'gray.900')}
-            borderColor={useColorModeValue('gray.500', 'gray.900')}
+            bg={titleBackgroundColor}
+            color={titleTextColor}
+            borderColor={titleBorderColor}
             borderWidth="1px"
             borderRadius="5px"
             fontWeight="bold"
@@ -122,7 +131,7 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   mb="2px"
                   textAlign="center"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                 >
                   Select MINT or BURN
                 </FormLabel>
@@ -130,20 +139,14 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                   <Stack spacing={5} direction="row" justifyContent="center">
                     <Radio
                       value="mint"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('mintOrBurn')}
                     >
                       Mint
                     </Radio>
                     <Radio
                       value="burn"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('mintOrBurn')}
                     >
                       Burn
@@ -157,7 +160,7 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   htmlFor="ticker"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Token Ticker
@@ -182,7 +185,7 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.ticker && errors.ticker.message}
                 </FormErrorMessage>
               </FormControl>
@@ -192,25 +195,26 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   htmlFor="supply"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
-                  Amount to Mint
+                  Amount to Mint or Burn
                 </FormLabel>
                 <Input
                   id="supply"
                   type="number"
-                  defaultValue={formSupply}
+                  placeholder={formSupply}
                   variant="owner"
+                  textAlign="right"
                   {...register('supply', {
                     required: 'This is required',
                     min: {
-                      value: 1e-30,
-                      message: 'Must mint >1e-30',
+                      value: 1,
+                      message: 'Must be a real quantity',
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.supply && errors.supply.message}
                 </FormErrorMessage>
               </FormControl>
@@ -253,7 +257,12 @@ const MintTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
             >
               <Center>
                 {isAreYouSureOpen && (
-                  <Button variant="owner" type="submit" mt="30px" width="fit-content">
+                  <Button
+                    variant="owner"
+                    type="submit"
+                    mt="30px"
+                    width="fit-content"
+                  >
                     Confirm
                   </Button>
                 )}

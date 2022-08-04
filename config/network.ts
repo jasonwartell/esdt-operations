@@ -7,6 +7,8 @@ export const DAPP_INIT_ROUTE: string = '/dapp/init';
 
 export const chainType = process.env.NEXT_PUBLIC_ELROND_CHAIN || 'devnet';
 
+export const gateway = process.env.NEXT_PUBLIC_ELROND_GATEWAY || 'https://devnet-gateway.elrond.com';
+
 export const networkConfig: Record<string, NetworkType> = {
   devnet: {
     id: 'devnet',

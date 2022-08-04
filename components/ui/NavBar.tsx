@@ -27,14 +27,18 @@ interface NavBarProps {
 
 export const NavBar: FC<NavBarProps> = ({ enabled }) => {
   const { isOpen, onToggle } = useDisclosure();
+  const navbarBackgroundColor = useColorModeValue('gray.200', 'gray.800');
+  const navbarBorderColor = useColorModeValue('teal.600', 'teal.600');
+  const logoColor = useColorModeValue('whiteAlpha.900', 'whiteAlpha.700');
+  const hamburgerColor = useColorModeValue('teal.700', 'teal.600');
 
   return (
     <Box position="sticky" top="0px" zIndex={2}>
       <Flex
-        bg={useColorModeValue('gray.200', 'gray.800')}
+        bg={navbarBackgroundColor}
         minH={'60px'}
         borderBottomWidth="1px"
-        borderBottomColor={useColorModeValue('teal.600', 'teal.600')}
+        borderBottomColor={navbarBorderColor}
         py={{ base: 2 }}
         px={[2, 4]}
         direction="row"
@@ -48,6 +52,7 @@ export const NavBar: FC<NavBarProps> = ({ enabled }) => {
         >
           <IconButton
             onClick={onToggle}
+            color={hamburgerColor}
             icon={
               isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
             }
@@ -64,9 +69,11 @@ export const NavBar: FC<NavBarProps> = ({ enabled }) => {
             <Center
               width="100px"
               borderWidth={'1px'}
+              borderColor={logoColor}
+              borderRadius="5px"
               fontFamily={'heading'}
               alignItems="center"
-              color={useColorModeValue('gray.800', 'white')}
+              color={logoColor}
               _hover={{ cursor: 'pointer' }}
             >
               Logo

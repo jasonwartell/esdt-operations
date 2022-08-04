@@ -48,7 +48,10 @@ export const OwnerActions = () => {
         <GridRouter href="/setRoles">Set or Unset <br /> Roles</GridRouter>
         <GridRouter href="/sendESDT">Transfer ESDT</GridRouter>
         <GridRouter href="/sendMultiESDT">
-          Multi-Token <br /> Transfer
+          Multi-Token <br /> Select <br /> Transfer
+        </GridRouter>
+        <GridRouter href="/sendMultiManualESDT">
+          Multi-Token <br /> Manual <br /> Transfer
         </GridRouter>
         <GridRouter href="/sendScESDT">
           Transfer ESDT <br /> via SC Method
@@ -58,7 +61,6 @@ export const OwnerActions = () => {
         <GridRouter href="/freezeESDT">Freeze or <br /> Unfreeze ESDT</GridRouter>
         <GridRouter href="/wipeESDT">Wipe ESDT</GridRouter>
         <GridRouter href="/changeOwnerESDT">Change Owner</GridRouter>
-        <GridRouter href="/">Close Forms</GridRouter>
       </Grid>
     </Center>
   );

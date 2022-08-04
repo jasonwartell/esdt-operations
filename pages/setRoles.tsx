@@ -6,6 +6,9 @@ import { OwnerActions } from '../components/ui/OwnerActions';
 import TokenTx from '../components/tools/TokenTx';
 
 const SetRolesESDT = () => {
+  const alphaColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.600');
+
+
   return (
     <MainLayout
       metaTitle={undefined}
@@ -18,7 +21,7 @@ const SetRolesESDT = () => {
         spinnerCentered
         fallback={
           <Text
-            color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+            color={alphaColor}
             fontWeight="bold"
             fontSize="2xl"
             textAlign="center"

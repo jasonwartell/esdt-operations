@@ -6,6 +6,6 @@ export const dappHostname = process.env.NEXT_PUBLIC_DAPP_HOST;
 // HTML metata and og tags, default values for MetaHead.tsx component
 export const defaultMetaTags = {
   title: 'ESDT Operations - Elrond blockchain',
-  description: 'GUI Website plugin for ESDT Operations',
+  description: 'Open source GUI for conducting ESDT Operations on Elrond blockchain.',
   image: `${dappHostname}/og-image.png`,
 };

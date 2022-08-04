@@ -28,7 +28,12 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
-import { builtInEsdtSC, esdtOperationsGasLimit, esdtTokenProperties, issueTokenPayment } from '../../config/config';
+import {
+  builtInEsdtSC,
+  esdtOperationsGasLimit,
+  esdtTokenProperties,
+  issueTokenPayment,
+} from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 
 const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
@@ -60,7 +65,7 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
 
   function onSubmit(values: any) {
     return new Promise<void>((resolve) => {
-      const gas = esdtOperationsGasLimit; 
+      const gas = esdtOperationsGasLimit;
       const cost = issueTokenPayment;
 
       const esdtTokenPropertiesEnabled = [
@@ -103,8 +108,21 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   ///// Form Placeholders & Default Values
   const formName = 'Abcd';
   const formTicker = 'ABC';
-  const formSupply = 1000e6;
-  const formDecimals = 6;
+  const formSupply = '0';
+  const formDecimals = '0';
+
+  ///// Color Scheme
+  const checkboxColor = useColorModeValue('teal.400', 'black');
+  const formLabelColor = useColorModeValue(
+    'blackAlpha.700',
+    'whiteAlpha.600'
+  );
+  const errorColor = useColorModeValue('red.600', 'red.500');
+  const titleBackgroundColor = useColorModeValue('teal.400', 'teal.800');
+  const titleTextColor = useColorModeValue('gray.500', 'gray.900');
+  const titleBorderColor = useColorModeValue('gray.500', 'gray.900');
+  const formBackgroundColor = useColorModeValue('gray.300', 'gray.800');
+  const formBorderColor = useColorModeValue('teal.400', 'teal.800');
 
   return (
     <Flex direction="row" justifyContent="center" mt="10px">
@@ -113,16 +131,16 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
         height="fit-content"
         borderWidth="1px"
         borderRadius="5px"
-        bg={useColorModeValue('gray.300', 'gray.800')}
-        borderColor={useColorModeValue('teal.400', 'teal.800')}
+        bg={formBackgroundColor}
+        borderColor={formBorderColor}
         flexDirection="row"
         justifyContent="space-between"
       >
         <Box width="full" height="30px" px="5px" pt="5px" mb="10px">
           <Center
-            bg={useColorModeValue('teal.400', 'teal.800')}
-            color={useColorModeValue('gray.500', 'gray.900')}
-            borderColor={useColorModeValue('gray.500', 'gray.900')}
+            bg={titleBackgroundColor}
+            color={titleTextColor}
+            borderColor={titleBorderColor}
             borderWidth="1px"
             borderRadius="5px"
             fontWeight="bold"
@@ -131,20 +149,23 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
           </Center>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid templateRows={["repeat(6, 1fr)", "repeat(4, 1fr)"]} templateColumns={["repeat(8, 1fr)", "repeat(24, 1fr)"]}>
-            <GridItem rowSpan={1} colSpan={[8, 16]} px={["2px", "5px"]}>
+          <Grid
+            templateRows={['repeat(6, 1fr)', 'repeat(4, 1fr)']}
+            templateColumns={['repeat(8, 1fr)', 'repeat(24, 1fr)']}
+          >
+            <GridItem rowSpan={1} colSpan={[8, 16]} px={['2px', '5px']}>
               <FormControl isInvalid={!!errors?.name}>
                 <FormLabel
                   htmlFor="name"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Token Name
                 </FormLabel>
                 <Input
                   id="name"
-                  defaultValue={formName}
+                  placeholder={formName}
                   variant="owner"
                   width="full"
                   {...register('name', {
@@ -158,30 +179,29 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                       message: 'Must be less than 20 characters',
                     },
                     pattern: {
-                      
                       value: /^[a-zA-Z0-9]+$/,
                       message: 'Alphanumeric characters only',
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.name && errors.name.message}
                 </FormErrorMessage>
               </FormControl>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[8, 16]} px={["2px", "5px"]}>
+            <GridItem rowSpan={1} colSpan={[8, 16]} px={['2px', '5px']}>
               <FormControl isInvalid={!!errors?.ticker}>
                 <FormLabel
                   htmlFor="ticker"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Token Ticker
                 </FormLabel>
                 <Input
                   id="ticker"
-                  defaultValue={formTicker}
+                  placeholder={formTicker}
                   variant="owner"
                   {...register('ticker', {
                     required: 'This is required',
@@ -199,34 +219,35 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.ticker && errors.ticker.message}
                 </FormErrorMessage>
               </FormControl>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[4, 6]} px={["2px", "5px"]}>
+            <GridItem rowSpan={1} colSpan={[4, 6]} px={['2px', '5px']}>
               <FormControl isInvalid={!!errors?.decimals}>
                 <FormLabel
                   htmlFor="decimals"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Decimals
                 </FormLabel>
                 <Input
                   id="decimals"
-                  defaultValue={formDecimals}
+                  placeholder={formDecimals}
                   variant="owner"
+                  textAlign="right"
                   {...register('decimals', {
                     required: 'This is required',
                     min: {
                       value: 0,
-                      message: 'Must be between 0-18'
+                      message: 'Must be between 0-18',
                     },
                     max: {
                       value: 18,
-                      message: 'Must be between 0-18'
+                      message: 'Must be between 0-18',
                     },
                     pattern: {
                       value: /^[0-9]+$/,
@@ -234,50 +255,60 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.decimals && errors.decimals.message}
                 </FormErrorMessage>
               </FormControl>
             </GridItem>
 
-            <GridItem rowSpan={1} colSpan={[4, 10]} px={["2px", "5px"]}>
+            <GridItem rowSpan={1} colSpan={[4, 10]} px={['2px', '5px']}>
               <FormControl isInvalid={!!errors?.supply}>
                 <FormLabel
                   htmlFor="supply"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Initial Supply
                 </FormLabel>
                 <Input
                   id="supply"
-                  defaultValue={formSupply}
+                  placeholder={formSupply}
                   variant="owner"
+                  textAlign="right"
                   {...register('supply', {
                     required: 'This is required',
+                    min: {
+                      value: 1,
+                      message: 'Must be a real quantity',
+                    },
                     pattern: {
                       value: /^[0-9]+$/,
                       message: 'Must be a number',
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.supply && errors.supply.message}
                 </FormErrorMessage>
               </FormControl>
             </GridItem>
-            <GridItem rowStart={[4, 1]} colStart={[3, 17]} rowSpan={[3]} colSpan={[5, 8]}>
+            <GridItem
+              rowStart={[4, 1]}
+              colStart={[3, 17]}
+              rowSpan={[3]}
+              colSpan={[5, 8]}
+            >
               <FormControl>
                 <FormLabel
                   mb="2px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                 >
                   Token Attributes
                 </FormLabel>
                 <CheckboxGroup
                   colorScheme="gray"
-                  size='sm'
+                  size="sm"
                   defaultValue={[
                     'canFreeze',
                     'canWipe',
@@ -291,89 +322,65 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 >
                   <Stack spacing={[1, 0]} direction={['column', 'column']}>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canFreeze"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canFreeze')}
                     >
                       Can Freeze
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canWipe"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canWipe')}
                     >
                       Can Wipe
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canPause"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canPause')}
                     >
                       Can Pause
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canMint"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canMint')}
                     >
                       Can Mint
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canBurn"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canBurn')}
                     >
                       Can Burn
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canChangeOwner"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canChangeOwner')}
                     >
                       Can Change Owner
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canUpgrade"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canUpgrade')}
                     >
                       Can Upgrade
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="canAddSpecialRoles"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('canAddSpecialRoles')}
                     >
                       Can Add Special Roles
@@ -382,7 +389,13 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 </CheckboxGroup>
               </FormControl>
             </GridItem>
-            <GridItem rowStart={[7, 4]} colStart={[2, 7]} rowSpan={1} colSpan={2} px="5px">
+            <GridItem
+              rowStart={[7, 4]}
+              colStart={[2, 7]}
+              rowSpan={1}
+              colSpan={2}
+              px="5px"
+            >
               <Center>
                 {isAreYouSureOpen ? (
                   <Button
@@ -405,10 +418,21 @@ const IssueTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 )}
               </Center>
             </GridItem>
-            <GridItem rowStart={[7, 4]} colStart={[6, 15]} rowSpan={1} colSpan={2} px="5px">
+            <GridItem
+              rowStart={[7, 4]}
+              colStart={[6, 15]}
+              rowSpan={1}
+              colSpan={2}
+              px="5px"
+            >
               <Center>
                 {isAreYouSureOpen && (
-                  <Button variant="owner" type="submit" mt="30px" width="fit-content">
+                  <Button
+                    variant="owner"
+                    type="submit"
+                    mt="30px"
+                    width="fit-content"
+                  >
                     Confirm
                   </Button>
                 )}

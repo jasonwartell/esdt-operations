@@ -5,7 +5,7 @@ import { MainLayout } from '../components/ui/MainLayout';
 import { OwnerActions } from '../components/ui/OwnerActions';
 import TokenTx from '../components/tools/TokenTx';
 
-const ChangeOwnerESDT = () => {
+const SendMultiManualESDT = () => {
   const alphaColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.600');
 
 
@@ -41,11 +41,11 @@ const ChangeOwnerESDT = () => {
           mb="0px"
           pb="5px"
         >
-          <TokenTx tokenTx={'change'} />
+          <TokenTx tokenTx={'multiman'} />
           <OwnerActions />
         </Box>
       </Authenticated>
     </MainLayout>
   );
 };
-export default ChangeOwnerESDT;
+export default SendMultiManualESDT;

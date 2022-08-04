@@ -17,7 +17,6 @@ export function middleware(request: NextRequest) {
   if (!referer?.includes(definedHost)) {
     return NextResponse.rewrite(new URL('/forbidden', request.url));
   }
-  
+
   return NextResponse.next();
 }
-

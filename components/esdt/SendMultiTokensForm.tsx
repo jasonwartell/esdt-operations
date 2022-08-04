@@ -1,40 +1,43 @@
-import axios from 'axios';
 import {
   Address,
   MultiESDTNFTTransferPayloadBuilder,
   TokenPayment,
   TransactionPayload,
 } from '@elrondnetwork/erdjs';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Box,
   Button,
   Center,
+  Checkbox,
+  CheckboxGroup,
   Flex,
   FormControl,
   FormLabel,
   Grid,
   GridItem,
   Input,
+  Spinner,
+  Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useTransaction } from '../../hooks/core/useTransaction';
 import {
-  chain,
   multiEsdtBaseGasLimit,
   multiEsdtDataGasLimit,
   multiEsdtPaymentGasLimit,
-  publicApi,
 } from '../../config/config';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 import { accountState } from '../../store/auth';
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import { ProxyNetworkProvider } from '@elrondnetwork/erdjs-network-providers/out';
+import { gateway } from '../../config/network';
 
 type FormValues = {
   recipientAddress: string;
   token: {
+    selected: boolean;
     identifier: string;
     quantity: string;
   }[];
@@ -45,21 +48,19 @@ const SendMultiTokensForm = ({
 }: {
   cb: (params: TransactionCb) => void;
 }) => {
+  const [listOfTokens, setListOfTokens] = useState<string[]>([]);
+  const [listOfBalances, setListOfBalances] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
   const {
     handleSubmit,
     register,
-    control,
     reset,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      token: [{ identifier: '', quantity: '0' }],
+      token: [{ selected: false }],
     },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    name: 'token',
-    control,
   });
 
   const { triggerTx } = useTransaction({ cb });
@@ -81,10 +82,114 @@ const SendMultiTokensForm = ({
     onToggle: onAreYouSureToggle,
   } = useDisclosure();
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
+  async function FetchTokens() {
+    let networkProvider = new ProxyNetworkProvider(gateway);
+    let addressOfUser = new Address(accountState.address);
 
+    let userTokenList = await networkProvider.getFungibleTokensOfAccount(
+      addressOfUser
+    );
+
+    let userTokens: string[] = [];
+    let tokenBalances: number[] = [];
+    let tokenDecimals: number[] = [];
+    let tokenBalancesDecimals: string[] = [];
+
+    userTokenList.map(async (token: any) => {
+      userTokens.push(token.identifier);
+      tokenBalances.push(token.balance.toNumber());
+    });
+
+    for (let userToken of userTokens) {
+      let tokenDefinition = await networkProvider.getDefinitionOfFungibleToken(
+        userToken
+      );
+      tokenDecimals.push(tokenDefinition.decimals);
+    }
+
+    for (let i = 0; i < tokenDecimals.length; i++) {
+      tokenBalancesDecimals.push(
+        (tokenBalances[i] / 10 ** tokenDecimals[i]).toFixed(4)
+      );
+    }
+
+    setListOfBalances(tokenBalancesDecimals);
+    setListOfTokens(userTokens);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    (async () => {
+      await FetchTokens();
+    })();
+  }, [listOfBalances]);
+
+  function UserTokens() {
+    return (
+      <CheckboxGroup colorScheme="gray" size="md">
+        {listOfTokens.map((token, index) => {
+          return (
+            <Grid
+              key={token}
+              templateColumns={'repeat(24, 1fr)'}
+              px={['2px', '5px']}
+            >
+              <GridItem rowSpan={1} colSpan={1}>
+                <Checkbox
+                  mt="6px"
+                  type="hidden"
+                  iconColor={checkboxColor}
+                  color={formLabelColor}
+                  {...register(`token.${index}.selected`)}
+                />
+              </GridItem>
+              <GridItem rowSpan={1} colSpan={9} mt="3px">
+                <Input
+                  value={listOfTokens[index]}
+                  color={fixedInputColor}
+                  borderColor={fixedInputBorderColor}
+                  isReadOnly
+                  {...register(`token.${index}.identifier`)}
+                />
+              </GridItem>
+              <GridItem rowSpan={1} colSpan={7} mt="3px" ml="5px">
+                {listOfBalances && (
+                  <Input
+                    textAlign="right"
+                    value={listOfBalances[index]}
+                    color={fixedInputColor}
+                    borderColor={fixedInputBorderColor}
+                    isReadOnly
+                  />
+                )}
+              </GridItem>
+              <GridItem rowSpan={1} colSpan={7} mt="3px" ml="5px">
+                <FormControl isInvalid={!!errors?.token?.[index]?.quantity}>
+                  <Input
+                    variant={
+                      errors?.token?.[index]?.quantity ? 'error' : 'owner'
+                    }
+                    textAlign="right"
+                    {...register(`token.${index}.quantity`, {
+                      required: false,
+                      min: 1e-18,
+                      pattern: /^\d*(\.\d{1,6})?$/,
+                    })}
+                  />
+                </FormControl>
+              </GridItem>
+            </Grid>
+          );
+        })}
+      </CheckboxGroup>
+    );
+  }
+
+  const onSubmit = (values: FormValues) => {
     const { recipientAddress, token } = values;
+    const tokensSelected = token.map(({ selected }) => {
+      return selected;
+    });
     const tokenIdentifiers = token.map(({ identifier }) => {
       return identifier;
     });
@@ -93,36 +198,32 @@ const SendMultiTokensForm = ({
     });
     const tokenDecimals: number[] = [];
     const payments: TokenPayment[] = [];
+    const selectedTokenIdentifiers: string[] = [];
+    const selectedTokenQuantities: string[] = [];
 
-    console.log(recipientAddress, tokenIdentifiers, tokenQuantities);
+    let networkProvider = new ProxyNetworkProvider(gateway);
+
+    for (let i = 0; i < tokensSelected.length; i++) {
+      if (tokensSelected[i]) {
+        selectedTokenIdentifiers.push(tokenIdentifiers[i]);
+        selectedTokenQuantities.push(tokenQuantities[i]);
+      }
+    }
 
     return new Promise<void>(async (resolve) => {
-      for (let tokenIdentifer of tokenIdentifiers) {
-        const esdtOnNetwork = await axios.get<{ decimals: number }>(
-          `${publicApi[chain]}/tokens/${tokenIdentifer.trim()}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
-          }
+      for (let tokenIdentifier of selectedTokenIdentifiers) {
+        let tokenDefinition = await networkProvider.getDefinitionOfFungibleToken(
+          tokenIdentifier
         );
-
-        let numDecimals = esdtOnNetwork?.data?.decimals;
-
-        if (numDecimals !== undefined && numDecimals !== null) 
-          tokenDecimals.push(numDecimals);
+        tokenDecimals.push(tokenDefinition.decimals);
       }
 
-      console.log(tokenDecimals);
-
-      if (tokenDecimals.length == tokenIdentifiers.length) {
-        for (let i in tokenIdentifiers) {
-          console.log(tokenIdentifiers[i], tokenQuantities[i], tokenDecimals[i]);
+      if (tokenDecimals.length == selectedTokenIdentifiers.length) {
+        for (let i in selectedTokenIdentifiers) {
           payments.push(
             TokenPayment.fungibleFromAmount(
-              tokenIdentifiers[i],
-              tokenQuantities[i],
+              selectedTokenIdentifiers[i],
+              selectedTokenQuantities[i],
               tokenDecimals[i]
             )
           );
@@ -139,36 +240,50 @@ const SendMultiTokensForm = ({
         multiEsdtDataGasLimit * data.length() +
         multiEsdtPaymentGasLimit * payments.length;
 
-      handleSendTx(data, gasLimit);
-
       resolve();
       reset();
+      setListOfBalances([]);
+      setListOfTokens([]);
+
+      handleSendTx(data, gasLimit);
     });
   };
 
   ///// Form Placeholders & Default Values
   const formAddress = 'erd1...';
 
-  const iconColor = useColorModeValue('teal.400', 'teal.800');
-  const iconBackground = useColorModeValue('gray.500', 'gray.900');
+  ///// Color Scheme
+  const checkboxColor = useColorModeValue('teal.400', 'black');
+  const formLabelColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.600');
+  const titleBackgroundColor = useColorModeValue('teal.400', 'teal.800');
+  const titleTextColor = useColorModeValue('gray.500', 'gray.900');
+  const titleBorderColor = useColorModeValue('gray.500', 'gray.900');
+  const formBackgroundColor = useColorModeValue('gray.300', 'gray.800');
+  const formBorderColor = useColorModeValue('teal.400', 'teal.800');
+  const fixedInputColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.600');
+  const fixedInputBorderColor = useColorModeValue(
+    'blackAlpha.700',
+    'whiteAlpha.600'
+  );
+  const scrollbarColor = useColorModeValue('teal.400', 'teal.800');
 
   return (
     <Flex direction="row" justifyContent="center" mt="10px">
       <Box
-        width={['full', 'full', '400px']}
-        height="fit-content"
+        width={['full', 'full', '500px']}
+        height="346px"
         borderWidth="1px"
         borderRadius="5px"
-        bg={useColorModeValue('gray.300', 'gray.800')}
-        borderColor={useColorModeValue('teal.400', 'teal.800')}
+        bg={formBackgroundColor}
+        borderColor={formBorderColor}
         flexDirection="row"
         justifyContent="space-between"
       >
         <Box width="full" height="30px" px="5px" pt="5px" mb="10px">
           <Center
-            bg={useColorModeValue('teal.400', 'teal.800')}
-            color={useColorModeValue('gray.500', 'gray.900')}
-            borderColor={useColorModeValue('gray.500', 'gray.900')}
+            bg={titleBackgroundColor}
+            color={titleTextColor}
+            borderColor={titleBorderColor}
             borderWidth="1px"
             borderRadius="5px"
             fontWeight="bold"
@@ -176,19 +291,19 @@ const SendMultiTokensForm = ({
             Transfer Multiple ESDTs
           </Center>
         </Box>
-
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid
             templateRows={'repeat(1, 1fr)'}
             templateColumns={'repeat(24, 1fr)'}
+            px={['2px', '5px']}
           >
-            <GridItem rowSpan={1} colSpan={24} px={['2px', '5px']}>
+            <GridItem rowSpan={1} colSpan={24}>
               <FormControl isInvalid={!!errors?.recipientAddress}>
                 <FormLabel
                   htmlFor="recipientAddress"
                   mt="10px"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Recipient Address
@@ -199,85 +314,71 @@ const SendMultiTokensForm = ({
                   variant={errors.recipientAddress ? 'error' : 'owner'}
                   {...register('recipientAddress', {
                     required: true,
-                    pattern: {
-                      value: /^erd1[a-zA-Z0-9]{58}$/,
-                      message: 'Invalid wallet address',
-                    },
+                    pattern: /^erd1[a-zA-Z0-9]{58}$/,
                   })}
                 />
               </FormControl>
             </GridItem>
+
             <GridItem
+              colStart={2}
               rowSpan={1}
-              colSpan={11}
-              px={['2px', '5px']}
-              color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+              colSpan={9}
+              ml="5px"
+              color={formLabelColor}
             >
-              Token Identifier
+              Token
             </GridItem>
             <GridItem
+              colStart={11}
               rowSpan={1}
-              colSpan={13}
-              color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+              colSpan={7}
+              ml="5px"
+              color={formLabelColor}
             >
-              Amount to Send
+              Available
+            </GridItem>
+            <GridItem
+              colStart={18}
+              rowSpan={1}
+              colSpan={7}
+              ml="5px"
+              color={formLabelColor}
+            >
+              Amount
             </GridItem>
           </Grid>
 
-          {fields.map((field, index) => {
-            return (
-              <Grid key={field.id} templateColumns={'repeat(24, 1fr)'}>
-                <GridItem rowSpan={1} colSpan={11} px={['2px', '5px']}>
-                  <FormControl isInvalid={!!errors?.token?.[index]?.identifier}>
-                    <Input
-                      placeholder="ABC-123456"
-                      variant={
-                        errors?.token?.[index]?.identifier ? 'error' : 'owner'
-                      }
-                      {...register(`token.${index}.identifier`, {
-                        required: true,
-                        minLength: 10,
-                        maxLength: 17,
-                        pattern: /^[A-Z]{3,10}-[a-z0-9]{6}$/,
-                      })}
-                    />
-                  </FormControl>
-                </GridItem>
-                <GridItem rowSpan={1} colSpan={11} px={['2px', '5px']}>
-                  <FormControl isInvalid={!!errors?.token?.[index]?.quantity}>
-                    <Input
-                      placeholder="0"
-                      type="number"
-                      variant={
-                        errors?.token?.[index]?.quantity ? 'error' : 'owner'
-                      }
-                      {...register(`token.${index}.quantity`, {
-                        required: true,
-                        min: 1e-30,
-                      })}
-                    />
-                  </FormControl>
-                </GridItem>
-                <GridItem rowSpan={1} colSpan={1} px={['2px', '5px']}>
-                  <Button onClick={() => remove(index)}>
-                    <DeleteIcon bg={iconBackground} color={iconColor} />
-                  </Button>
-                </GridItem>
-                <GridItem rowSpan={1} colSpan={1} px={['2px', '5px']}>
-                  <Button
-                    onClick={() =>
-                      append({
-                        identifier: '',
-                        quantity: '10',
-                      })
-                    }
-                  >
-                    <AddIcon bg={iconBackground} color={iconColor} />
-                  </Button>
-                </GridItem>
-              </Grid>
-            );
-          })}
+          {loading ? (
+            <Box flex-direction="column" width="full">
+              <Text textAlign="center">
+                Fetching token data, please wait...
+              </Text>
+              <Center>
+                <Spinner size="sm" />
+              </Center>
+            </Box>
+          ) : (
+            <Box
+              maxHeight="140px"
+              overflowY="auto"
+              sx={{
+                '&::-webkit-scrollbar': {
+                  width: '4px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  width: '6px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: scrollbarColor,
+                  borderRadius: '24px',
+                },
+              }}
+            >
+              <UserTokens />
+            </Box>
+          )}
+
           <Grid templateColumns={'repeat(24, 1fr)'}>
             <GridItem
               rowStart={4}
@@ -289,19 +390,22 @@ const SendMultiTokensForm = ({
               <Center>
                 {isAreYouSureOpen ? (
                   <Button
-                    onClick={onAreYouSureToggle}
+                    onClick={() => {
+                      onAreYouSureToggle();
+                      reset();
+                    }}
                     mt="30px"
                     variant="owner"
-                    width="fit-content"
+                    minWidth="80px"
                   >
-                    Change
+                    Reset
                   </Button>
                 ) : (
                   <Button
                     onClick={onAreYouSureToggle}
                     mt="30px"
                     variant="owner"
-                    width="fit-content"
+                    minWidth="80px"
                   >
                     Submit
                   </Button>
@@ -321,7 +425,7 @@ const SendMultiTokensForm = ({
                     variant="owner"
                     type="submit"
                     mt="30px"
-                    width="fit-content"
+                    minWidth="80px"
                   >
                     Confirm
                   </Button>

@@ -19,6 +19,7 @@ import {
   networkConfig,
   chainType,
   DAPP_INIT_ROUTE,
+  gateway,
 } from '../../config/network';
 import { getBridgeAddressFromNetwork } from '../../utils/bridgeAddress';
 import { getParamFromUrl } from '../../utils/getParamFromUrl';
@@ -90,7 +91,7 @@ export const useElrondNetworkSync = () => {
     const askForApiNetworkProvider = async () => {
       let apiNetworkProvider = apiNetworkProviderRef?.current;
       if (!apiNetworkProvider) {
-        const publicApiEndpoint = process.env.NEXT_PUBLIC_ELROND_API;
+        const publicApiEndpoint = networkConfig[chainType].apiAddress; //process.env.NEXT_PUBLIC_ELROND_API;
         if (publicApiEndpoint) {
           apiNetworkProvider = new ApiNetworkProvider(publicApiEndpoint, {
             timeout: Number(networkConfig[chainType].apiTimeout),

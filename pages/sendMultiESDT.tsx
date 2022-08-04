@@ -5,7 +5,10 @@ import { MainLayout } from '../components/ui/MainLayout';
 import { OwnerActions } from '../components/ui/OwnerActions';
 import TokenTx from '../components/tools/TokenTx';
 
-const SendESDT = () => {
+const SendMultiESDT = () => {
+  const alphaColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.600');
+
+
   return (
     <MainLayout
       metaTitle={undefined}
@@ -14,21 +17,7 @@ const SendESDT = () => {
       metaUrl={undefined}
     >
       <NavBar enabled={['auth']} />
-      <Authenticated
-        spinnerCentered
-        fallback={
-          <Text
-            color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
-            fontWeight="bold"
-            fontSize="2xl"
-            textAlign="center"
-            mt={8}
-            mb={8}
-          >
-            Connect your wallet!
-          </Text>
-        }
-      >
+      
         <Box
           minHeight="100vh"
           flexDirection="column"
@@ -41,8 +30,8 @@ const SendESDT = () => {
           <TokenTx tokenTx={'multi'} />
           <OwnerActions />
         </Box>
-      </Authenticated>
+      
     </MainLayout>
   );
 };
-export default SendESDT;
+export default SendMultiESDT;

@@ -60,9 +60,7 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
       const gas = esdtOperationsGasLimit;
       const cost = 0;
 
-      const args: TypedValue[] = [
-        BytesValue.fromUTF8(values.ticker),
-      ];
+      const args: TypedValue[] = [BytesValue.fromUTF8(values.ticker)];
 
       const data = new ContractCallPayloadBuilder()
         .setFunction(
@@ -81,7 +79,16 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
 
   ///// Form Placeholders & Default Values
   const formTicker = 'ABC-123456';
-  const formSupply = 1000000000;
+
+  ///// Color Scheme
+  const checkboxColor = useColorModeValue('teal.400', 'black');
+  const formLabelColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.600');
+  const errorColor = useColorModeValue('red.600', 'red.500');
+  const titleBackgroundColor = useColorModeValue('teal.400', 'teal.800');
+  const titleTextColor = useColorModeValue('gray.500', 'gray.900');
+  const titleBorderColor = useColorModeValue('gray.500', 'gray.900');
+  const formBackgroundColor = useColorModeValue('gray.300', 'gray.800');
+  const formBorderColor = useColorModeValue('teal.400', 'teal.800');
 
   return (
     <Flex direction="row" justifyContent="center" mt="10px">
@@ -90,16 +97,16 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
         height="fit-content"
         borderWidth="1px"
         borderRadius="5px"
-        bg={useColorModeValue('gray.300', 'gray.800')}
-        borderColor={useColorModeValue('teal.400', 'teal.800')}
+        bg={formBackgroundColor}
+        borderColor={formBorderColor}
         flexDirection="row"
         justifyContent="space-between"
       >
         <Box width="full" height="30px" px="5px" pt="5px" mb="10px">
           <Center
-            bg={useColorModeValue('teal.400', 'teal.800')}
-            color={useColorModeValue('gray.500', 'gray.900')}
-            borderColor={useColorModeValue('gray.500', 'gray.900')}
+            bg={titleBackgroundColor}
+            color={titleTextColor}
+            borderColor={titleBorderColor}
             borderWidth="1px"
             borderRadius="5px"
             fontWeight="bold"
@@ -118,7 +125,7 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   mb="2px"
                   textAlign="center"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                 >
                   Select Action
                 </FormLabel>
@@ -126,20 +133,14 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                   <Stack spacing={5} direction="row" justifyContent="center">
                     <Radio
                       value="mint"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('pauseOrUnpause')}
                     >
                       Pause
                     </Radio>
                     <Radio
                       value="burn"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('pauseOrUnpause')}
                     >
                       Unpause
@@ -153,7 +154,7 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   htmlFor="ticker"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Token Ticker
@@ -178,7 +179,7 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="4px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="4px" mt="0px">
                   {errors.ticker && errors.ticker.message}
                 </FormErrorMessage>
               </FormControl>
@@ -221,7 +222,12 @@ const PauseTokensForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
             >
               <Center>
                 {isAreYouSureOpen && (
-                  <Button variant="owner" type="submit" mt="30px" width="fit-content">
+                  <Button
+                    variant="owner"
+                    type="submit"
+                    mt="30px"
+                    width="fit-content"
+                  >
                     Confirm
                   </Button>
                 )}

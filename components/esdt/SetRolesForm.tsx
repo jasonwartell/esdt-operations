@@ -92,6 +92,19 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
   const formTicker = 'ABC-123456';
   const formAddress = 'erd1...';
 
+  ///// Color Scheme
+  const checkboxColor = useColorModeValue('teal.400', 'black');
+  const formLabelColor = useColorModeValue(
+    'blackAlpha.700',
+    'whiteAlpha.600'
+  );
+  const errorColor = useColorModeValue('red.600', 'red.500');
+  const titleBackgroundColor = useColorModeValue('teal.400', 'teal.800');
+  const titleTextColor = useColorModeValue('gray.500', 'gray.900');
+  const titleBorderColor = useColorModeValue('gray.500', 'gray.900');
+  const formBackgroundColor = useColorModeValue('gray.300', 'gray.800');
+  const formBorderColor = useColorModeValue('teal.400', 'teal.800');
+
   return (
     <Flex direction="row" justifyContent="center" mt="10px">
       <Box
@@ -99,16 +112,16 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
         height="fit-content"
         borderWidth="1px"
         borderRadius="5px"
-        bg={useColorModeValue('gray.300', 'gray.800')}
-        borderColor={useColorModeValue('teal.400', 'teal.800')}
+        bg={formBackgroundColor}
+        borderColor={formBorderColor}
         flexDirection="row"
         justifyContent="space-between"
       >
         <Box width="full" height="30px" px="5px" pt="5px" mb="10px">
           <Center
-            bg={useColorModeValue('teal.400', 'teal.800')}
-            color={useColorModeValue('gray.500', 'gray.900')}
-            borderColor={useColorModeValue('gray.500', 'gray.900')}
+            bg={titleBackgroundColor}
+            color={titleTextColor}
+            borderColor={titleBorderColor}
             borderWidth="1px"
             borderRadius="5px"
             fontWeight="bold"
@@ -127,7 +140,7 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   mb="2px"
                   textAlign="center"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                 >
                   Select Action
                 </FormLabel>
@@ -135,20 +148,14 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                   <Stack spacing={5} direction="row" justifyContent="center">
                     <Radio
                       value="set"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('setUnset')}
                     >
                       Set
                     </Radio>
                     <Radio
                       value="unset"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('setUnset')}
                     >
                       Unset
@@ -162,7 +169,7 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   textAlign="center"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                   width="full"
                 >
@@ -174,23 +181,17 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 >
                   <Stack spacing={5} direction="row" justifyContent="center">
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="mint"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('mint')}
                     >
                       Mint
                     </Checkbox>
                     <Checkbox
-                      iconColor={useColorModeValue('teal.400', 'teal.800')}
+                      iconColor={checkboxColor}
                       value="burn"
-                      color={useColorModeValue(
-                        'blackAlpha.700',
-                        'whiteAlpha.600'
-                      )}
+                      color={formLabelColor}
                       {...register('burn')}
                     >
                       Burn
@@ -208,7 +209,7 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                 <FormLabel
                   htmlFor="ticker"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Token Ticker
@@ -233,7 +234,7 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="-10px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="-10px" mt="0px">
                   {errors.ticker && errors.ticker.message}
                 </FormErrorMessage>
               </FormControl>
@@ -244,7 +245,7 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                   htmlFor="address"
                   mt="10px"
                   mb="0px"
-                  color={useColorModeValue('blackAlpha.700', 'whiteAlpha.600')}
+                  color={formLabelColor}
                   fontSize={['sm', 'md']}
                 >
                   Wallet Address
@@ -261,7 +262,7 @@ const SetRolesForm = ({ cb }: { cb: (params: TransactionCb) => void }) => {
                     },
                   })}
                 />
-                <FormErrorMessage color="red.700" mb="-16px" mt="0px">
+                <FormErrorMessage color={errorColor} mb="-16px" mt="0px">
                   {errors.address && errors.address.message}
                 </FormErrorMessage>
               </FormControl>
