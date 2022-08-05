@@ -30,6 +30,8 @@ export const esdtTokenProperties = [
   'canAddSpecialRoles',
 ];
 
+export const esdtTokenSpecialRoles = ['ESDTRoleLocalBurn', 'ESDTRoleLocalMint'];
+
 // Build in address for token issuance
 export const builtInEsdtSC =
   'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u';

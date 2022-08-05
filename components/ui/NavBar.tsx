@@ -156,6 +156,7 @@ const DesktopSubNav = ({
   href: any;
   subLabel: any;
 }) => {
+  const subNavBgColor = useColorModeValue('gray.500', 'gray.900');
   return (
     <NextLink href={href}>
       <Box
@@ -163,7 +164,7 @@ const DesktopSubNav = ({
         p={2}
         rounded={'md'}
         _hover={{
-          bg: useColorModeValue('gray.500', 'gray.900'),
+          bg: subNavBgColor,
           cursor: 'pointer',
         }}
         role={'group'}
@@ -189,10 +190,12 @@ const DesktopSubNav = ({
 };
 
 const MobileNav = () => {
+  const mobileNavBgColor = useColorModeValue('gray.200', 'gray.800');
+  const mobileNavColor = useColorModeValue('teal.600', 'teal.600');
   return (
     <Stack
-      bg={useColorModeValue('gray.200', 'gray.800')}
-      color={useColorModeValue('teal.600', 'teal.600')}
+      bg={mobileNavBgColor}
+      color={mobileNavColor}
       p={4}
       display={['auto', 'auto', 'none', 'none', 'none']}
     >
@@ -205,6 +208,10 @@ const MobileNav = () => {
 
 const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
   const { isOpen, onToggle } = useDisclosure();
+  const mobileNavItemBgColor = useColorModeValue('gray.500', 'gray.900');
+  const mobileNavHoverBgColor = useColorModeValue('gray.400', 'gray.700');
+  const mobileNavHoverColor = useColorModeValue('teal.200', 'teal.200');
+  const mobileNavBorderColor = useColorModeValue('gray.200', 'gray.700');
 
   return (
     <Stack spacing={4} onClick={children && onToggle}>
@@ -214,10 +221,10 @@ const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
         justify={'space-between'}
         align={'left'}
         border="1px"
-        bg={useColorModeValue('gray.500', 'gray.900')}
+        bg={mobileNavItemBgColor}
         _hover={{
-          bg: useColorModeValue('gray.400', 'gray.700'),
-          color: useColorModeValue('teal.200', 'teal.200'),
+          bg: mobileNavHoverBgColor,
+          color: mobileNavHoverColor,
           fontWeight: '800',
           cursor: 'pointer',
         }}
@@ -242,7 +249,7 @@ const MobileNavItem = ({ label, children }: { label: any; children?: any }) => {
           pl={4}
           borderLeft={1}
           borderStyle={'solid'}
-          borderColor={useColorModeValue('gray.200', 'gray.700')}
+          borderColor={mobileNavBorderColor}
           align={'start'}
           _hover={{ cursor: 'pointer' }}
         >

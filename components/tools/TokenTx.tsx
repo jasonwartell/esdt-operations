@@ -3,7 +3,6 @@ import {
   Box,
   Link,
   Spinner,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { TransactionCb } from '../../hooks/core/common-helpers/sendTxOperations';
 import { useLoginInfo } from '../../hooks/auth/useLoginInfo';
@@ -22,7 +21,6 @@ import { LoginMethodsEnum } from '../../types/enums';
 import { chainType, networkConfig } from '../../config/network';
 import { shortenHash } from '../../utils/shortenHash';
 import SendMultiTokensForm from '../esdt/SendMultiTokensForm';
-import SendMultiManualESDT from '../../pages/sendMultiManualESDT';
 import SendMultiTokensManualForm from '../esdt/SendMultiTokensManualForm';
 
 const TokenTx = ({tokenTx} : {tokenTx: string}) => {

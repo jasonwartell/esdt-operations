@@ -3,7 +3,6 @@ import { Box, Spacer, Text, useColorModeValue } from '@chakra-ui/react';
 import { Authenticated } from '../components/tools/Authenticated';
 import { MainLayout } from '../components/ui/MainLayout';
 import { OwnerActions } from '../components/ui/OwnerActions';
-import { Footer } from '../components/ui/Footer';
 
 function OwnerPage() {
   const alphaColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.600');
