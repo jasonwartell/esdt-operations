@@ -11,12 +11,12 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/sendScESDT')) {
     return NextResponse.rewrite(new URL('/underConstruction', request.url))
   }
-
+/*
   let referer = request.headers.get('referer');
 
   if (!referer?.includes(definedHost)) {
     return NextResponse.rewrite(new URL('/forbidden', request.url));
   }
-
+*/
   return NextResponse.next();
 }

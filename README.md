@@ -1,16 +1,31 @@
 ### ESDT Operations
 
 
+### Prerequisites
+1. ensure you have the latest version of npm installed
+2. ensure you have the latest version of nodejs installed
+
+
 
 ### How to start it locally:
 1. clone or download the repo
 2. `cd esdt-operations`
-3. `npm install`
-4. rename .env.example file to .env.local
+3. rename .env.example file to .env.local
+4. `npm install`
 6. `npm run dev` -> for development
 7. `npm run build` -> `npm start` for production
 
+### How to connect mobile device to your localhost:
+1. ensure your firewall is disabled or you allow access as necessary
+2. in middleware.ts comment out the following lines:
 
+```
+let referer = request.headers.get('referer');
+
+  if (!referer?.includes(definedHost)) {
+    return NextResponse.rewrite(new URL('/forbidden', request.url));
+  }
+```
 
 ### Full size screen shot
 ![Full_Screen](https://user-images.githubusercontent.com/26983109/179978532-2aa50f74-91db-47f2-8ae8-6abe8eb00dc7.png)
