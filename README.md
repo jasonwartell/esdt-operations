@@ -5,7 +5,7 @@ I do not intend to implement "ESDT Transfer to SC Method"
 There is enough info here and within ELROND documents to
 easily implement it for your specific needs.  Leaving the
 button to select it demonstrates how to use an "Under
-Construction" page redirect in you middleware with Next.js
+Construction" page redirect in your middleware with Next.js
 
 ### Prerequisites
 1. ensure you have the latest version of npm installed
